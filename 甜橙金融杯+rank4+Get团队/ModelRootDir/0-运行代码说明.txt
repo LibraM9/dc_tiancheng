@@ -1,0 +1,37 @@
+﻿特殊说明：
+  本代码对题目geo_code字段进行了反编码（geohash库反编码）后地址解析，通过腾讯开发者API调取地理位置信息
+  数据为GeoDetails.csv，数据爬虫代码启动代码为 ./geo_getdetail/Spider.py
+
+
+一、运行说明：
+(1)运行准备
+
+    1、命令行切换到数据目录，并启动notebook： cd path/to/ModelRootDir jupyter-notebook.exe
+    2、数据 存放ModelRootDir目录
+
+二、目录结构
+
+--ModelRootDir
+ |(file)>tran_transaction.csv
+ |(file)...
+ |(file)...
+ |(folde)-code
+ |       --->runtest.ipynb
+ |       --->code2
+ |       --->...
+三、使用 
+   使用runtest.ipynb 按照顺序运行代码即可
+
+ (2)代码逻辑
+
+1、执行data_preprocess进行预处理；
+2、执行extract_features进行特征构造；
+3、执行lightgbm_model进行训练，得到结果1；
+*（结果1是上面三个代码的结果）
+
+4、EdgePrepare代码：使用字段关联用户和其他维度得到图的边
+5、Graph_embeddings，使用Node2Vec和deepwalk分别训练64和36维特征向量
+6、lgb_embedding,图特征模型训练，得到结果2，3（不同维度匹配模式增白模型丰富度）
+*（结果2和3是edgeprepare和graph embedding以及2-1-FeatureExact和lgb_embedding得到的结果）
+7、运行blend_model，加权融合以上结果；
+8、运行rule_adjust，添加规则修正结果；

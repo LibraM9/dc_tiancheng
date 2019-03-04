@@ -1,0 +1,4 @@
+1-graph embedding
+2-node2vec
+3-word2vec
+4-lgb
